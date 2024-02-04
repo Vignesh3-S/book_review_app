@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.urls import path
 from . import views
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('',views.home,name = "home"),
@@ -35,6 +36,6 @@ urlpatterns = [
     path('forgotpasswordemail/',views.pwdchange_sendmsg,name="pwdchangeemail"),
     path('forgotpassword/<str:value>/<str:time>/',views.pwdchange,name="changepwd"),
     path('verificationemail/',views.send_verification_email,name="sendemailverify"),
-    path('userlogout/',views.User_logout,name = "logout"),
+    path('logout/',auth_views.LogoutView.as_view(),name = "logout"),
     path('getapi/',views.Getapi,name = "getapi"),
 ]
