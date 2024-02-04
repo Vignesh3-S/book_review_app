@@ -1,0 +1,55 @@
+{% extends 'book_review_app/index.html' %}
+{% block title %}BRS user login{% endblock %}
+{% load socialaccount %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_messages %}
+{% bootstrap_javascript %}
+{% block content %}
+<section class="h-100">
+    <div class="container h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col">
+                <div class="card card-registration my-4" style="border:1.5px solid; border-color:black;box-shadow: 2px 2px 2px 2px rgb(63,24,24);">
+                    <div class="row g-0">
+                        <div class="col">
+                            <div class="card-body p-md-5 text-black">
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name= "next" value={{request.GET.next}}>
+                                    <h3 class="mb-5 text-uppercase text-center animate__animated animate__fadeInLeftBig test-text" style="--animate-duration: 1.5s;">Log into Your account</h3>
+                                    <div class="row">
+                                        <div class="col-md mb-4  animate__animated animate__fadeInRightBig" style="--animate-duration: 1.5s;">
+                                            <div class="form-outline">
+                                                {% bootstrap_form form %}
+                                            </div>
+                                        </div>
+                                    <div class="d-grid mt-2 pt-3  animate__animated animate__fadeInUpBig" style="--animate-duration: 1.5s;">
+                                        <button class="btn btn-success" type="submit">Login</button> <br>
+                                        <button class="btn btn-secondary" type="reset">Reset Form</button>
+                                    </div>
+                                    <div class="animate__animated animate__fadeInDownBig" style="--animate-duration: 1.5s;">
+                                    <div class="mt-4 text-center">
+                                        <p>or continue with...</p>
+                                        <a href="{% provider_login_url 'google' %}" type="button" class="btn btn-link btn-floating mx-1">
+                                            <i class="fa-brands fa-google fa-beat-fade"></i>
+                                        </a>
+                                        <a href="{% provider_login_url 'github' %}" type="button" class="btn btn-link btn-floating mx-1">
+                                            <i class="fa-brands fa-github fa-beat-fade"></i>
+                                        </a>
+                                        
+                                    </div>
+                                    <p class="text-center fw-bold mx-3 mb-0 text-muted mt-3"><a href="{% url 'pwdchangeemail' %}" style="text-decoration: none;">Forgot Password?</a></p>
+                                    <p class="text-center fw-bold mx-3 mb-0 text-muted mt-3">Don't have an account?<a href="{% url 'signup' %}" style="text-decoration: none;"> Register here</a></p>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'book_review_app/index.html' %}
+{% block title %} BRS api page{% endblock title %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_messages %}
+{% bootstrap_javascript %}
+{% block content %}
+<section class="vh-100">
+  <style>
+    #srbg{
+      background-image: url('{% static "book_review_app/images/homebg.jpg" %}');
+    }
+  </style>
+  <div class="container py-5">
+    <div class="row d-flex justify-content-center align-items-center">
+      <div class="col col-lg-10 mb-5 mb-lg-0">
+        <div class="card mb-5" style="border:1.5px solid; border-color:#1C0D00;box-shadow: 1px 1px 10px 1px rgb(133, 97, 97);"
+        data-aos="zoom-in"data-aos-duration="1500">
+          <div class="row g-0">
+            <div class="col-md-4 text-center text-white" style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem; 
+            background-position: center; background-repeat: no-repeat;background-size: cover" id="srbg" data-aos="flip-left" 
+            data-aos-duration="1500">     
+            </div>
+            <div class="col-md-8">
+              <div class="card-body p-4">
+                <h6>API Information</h6>
+                <hr class="mt-0 mb-4">
+                <p class="test-text">Hello {{name}},</p>
+                <p class="test-text">Your can get the list of book reviews of our application using 
+                  the below credentials from your application. </p>
+                  <p>Your API token : <span style="color: rgb(27, 25, 58);"> {{token}}</span> </p>
+                  <p>The url :<span style="color: rgb(22, 22, 51);"> {{url}}</span></p>
+                <p class="test-text">Don't refresh the page and do copy paste the url to another file. 
+                    This Information shows to the user only once.</p> 
+                <p class="test-text">This token is valid for 15 days after that you will need to generate another api token.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
