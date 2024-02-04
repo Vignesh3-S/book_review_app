@@ -12,7 +12,7 @@ import secrets
 from django.template.loader import render_to_string
 from .models import User,Book,Feedback,ApiUser
 from django.contrib.sites.shortcuts import get_current_site
-from django.contrib.auth import authenticate,login,logout
+from django.contrib.auth import authenticate,login
 from django.contrib.auth.decorators import login_required
 import os
 import string
@@ -461,12 +461,6 @@ def send_verification_email(request):
             else:
                 messages.error(request,"Invalid Email. This email registered using third party.")
     return render(request,'book_review_app/pwdemailmsg.html',{'form':Emailform})
-
-# logout user
-@login_required(login_url = 'signin')
-def User_logout(request):
-    logout(request)
-    return redirect(reverse('home',messages.info(request,"Logout successfully.")),permanent=True)
 
 @login_required(login_url = 'signin')
 def Getapi(request):
