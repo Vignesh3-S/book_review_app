@@ -27,7 +27,7 @@ urlpatterns = [
     path('deletbook/<str:name>/<str:author>/<str:reviewer>/<str:genere>/',views.book_review_delete,name = "deletebook"),
     path('bookcollection/',views.review_collection,name = "collection"),
     path('mybookreviews/',views.my_reviews,name = "myreview"),
-    path('verify/<str:key>/<str:token>/<str:time>/',views.email_confirmation,name = "confirmemail"),
+    path('verify/<str:email>/<str:time>/',views.verify_confirmation,name = "confirmemail"),
     path('sendconfirm/<email>/',views.send_confirmation,name = "sendemail"),
     path('useredit/',views.editprofile,name = 'profileedit'),
     path('viewfeedback/<str:name>/<str:author>/<str:reviewer>/<str:genere>/',views.show_feedback,name = 'viewfeedback'),
@@ -35,7 +35,7 @@ urlpatterns = [
     path('play/<str:name>/<str:author>/<str:reviewer>/<str:genere>/',views.playaudio,name = "audioplay"),
     path('forgotpasswordemail/',views.pwdchange_sendmsg,name="pwdchangeemail"),
     path('forgotpassword/<str:value>/<str:time>/',views.pwdchange,name="changepwd"),
-    path('verificationemail/',views.send_verification_email,name="sendemailverify"),
+    path('verificationemail/',views.later_send_verification_email,name="sendemailverify"),
     path('logout/',auth_views.LogoutView.as_view(),name = "logout"),
     path('getapi/',views.Getapi,name = "getapi"),
 ]

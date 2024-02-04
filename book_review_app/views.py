@@ -83,9 +83,9 @@ def send_confirmation(request,email):
     site = get_current_site(request)
     user = User.objects.get(email = email)
     key = secrets.token_urlsafe(10)
-    body = urlsafe_base64_encode(force_bytes(user.id))
+    body = urlsafe_base64_encode(force_bytes(email))
     timestamp = urlsafe_base64_encode(force_bytes(time_str))
-    mail_message = render_to_string('book_review_app/email.html',{'key':key,'body':body,'name':user.username,'domain':site.domain,
+    mail_message = render_to_string('book_review_app/email.html',{'email':body,'name':user.username,'domain':site.domain,
                     'timestamp':timestamp,'scheme':request.scheme})
     try:
         send_mail('Account Confirmation','Account','brsapp33@gmail.com',[email,], html_message = mail_message,fail_silently=False)
@@ -94,25 +94,28 @@ def send_confirmation(request,email):
         return redirect(reverse('signup',messages.error(request,'An error occured. Make sure your device connected to the interet.')),permanent=True)
 
 # confirm account verification
-def email_confirmation(request,key,token,time):
-    times = datetime.now()
-    time_str = str(times.year)+str(times.month)+str(times.day)+str(times.hour)+str(times.minute)+str(times.second)
-    decrypt_time = urlsafe_base64_decode(force_str(time))
-    
-    if int(time_str)-int(decrypt_time) > 1000:
-        return redirect(reverse('home',messages.error(request,'Link expired.')),permanent=True)
-    
-    decrypt = urlsafe_base64_decode(force_str(token))
-    try:
-        user = User.objects.get(id = int(decrypt))
-    except:
-        return redirect(reverse('home',messages.error(request,'Invalid User.')),permanent=True)
-    if user.is_active == False:
-        user.is_active = True
-        user.save()
-        return redirect(reverse('home',messages.success(request,'Account verification successfull.')),permanent=True)
-    else:
-        return redirect(reverse('home',messages.error(request,'Account Already verified.')),permanent=True)
+def verify_confirmation(request,email,time):
+    if request.method == "GET":
+        times = datetime.now()
+        time_str = str(times.year)+str(times.month)+str(times.day)+str(times.hour)+str(times.minute)+str(times.second)
+        decrypt_time = urlsafe_base64_decode(force_str(time))
+        
+        if int(time_str)-int(decrypt_time) > 1000:
+            return redirect(reverse('home',messages.error(request,'Link expired.')),permanent=True)
+        
+        try:
+            decrypt_email = urlsafe_base64_decode(force_str(email))
+            str_decrypt_email = str(decrypt_email,encoding='utf-8')
+            user = User.objects.get(email = str_decrypt_email)
+        except:
+            return redirect(reverse('home',messages.error(request,'Invalid User.')),permanent=True)
+        
+        if user.is_active == False:
+            user.is_active = True
+            user.save()
+            return redirect(reverse('home',messages.success(request,'Account verification successfull.')),permanent=True)
+        else:
+            return redirect(reverse('home',messages.error(request,'Account Already verified.')),permanent=True)
 
 # Login part
 def login_user(request):
@@ -447,7 +450,7 @@ def pwdchange(request,value,time):
     return render(request,'book_review_app/pwdchange.html',{'form':PasswordChangeForm})
 
 # send email verification link
-def send_verification_email(request):
+def later_send_verification_email(request):
     if request.method == "POST":
         form = Emailform(request.POST)
         if form.is_valid():
