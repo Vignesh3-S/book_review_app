@@ -12,11 +12,7 @@
             <div class="col">
                 <div class="card card-registration my-4" style="border:1.5px solid; border-color:black;box-shadow: 2px 2px 2px 2px rgb(63,24,24);">
                     <div class="row g-0">
-                        <div class="col-xl-6 animate__animated animate__zoomIn" style="--animate-duration: 1s;">
-                            <img src="{% static 'book_review_app/images/bookupbg.jpg' %}" alt="Upload image" class="img-fluid"
-                            style="border-top-left-radius: .25rem; border-bottom-left-radius: .25rem;" />
-                        </div>
-                        <div class="col-xl-6 mt-3">
+                        <div class="col-xl mt-3">
                             <div class="card-body p-md-5 text-black mt-5">
                                 <form method="post" enctype="multipart/form-data">
                                     {% csrf_token %}

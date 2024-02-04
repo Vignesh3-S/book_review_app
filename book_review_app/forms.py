@@ -21,7 +21,6 @@ class Usercreateform(forms.ModelForm):
         labels = {
             "username": (""),
             "email": (""),
-            "usertype":(""),
             "mobilenumber":(""),
         }
         widgets = {
@@ -45,8 +44,8 @@ class Contactform(forms.ModelForm):
 
 # user Book Form
 class UserBookForm(forms.ModelForm):
-    bookimg = forms.ImageField(label = "Book Image",required=False,help_text="file extension must be .jpg, .jpeg, .png")
-    bookfile = forms.FileField(label = "Book File",required=False,help_text="file extension must be .mp3, .wav, .oog")
+    bookimg = forms.ImageField(label = "Book Image",required=False)
+    bookfile = forms.FileField(label = "Book File",required=False)
     class Meta():
         model = Book
         exclude = ('user','created_datetime','modified_datetime','bookimg','bookfile',)

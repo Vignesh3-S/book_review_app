@@ -240,14 +240,11 @@ def book_review_upload(request):
                 audiofile = request.FILES['bookfile']
             except:
                 return redirect(reverse('bookupload',messages.error(request,'No audio file selected.')),permanent=True) 
+            if imagefile.size > 1000024:
+                return redirect(reverse('bookupload',messages.info(request,'Image File size must be less than 1mb.')),permanent=True)
             if audiofile.size > 3000024:
-                return redirect(reverse('bookupload',messages.info(request,'File size must be less than 3mb.')),permanent=True) 
-            imgextension = os.path.splitext(imagefile.name)
-            audioextension = os.path.splitext(audiofile.name)
-            if imgextension[1] not in ['.jpg', '.jpeg', '.png', '.JPG', '.JPEG', '.PNG' ]:
-                return redirect(reverse('bookupload',messages.error(request,'Invalid Imagefile format.')),permanent=True) 
-            if audioextension[1] not in ['.mp3', '.wav', '.ogg', '.MP3', '.WAV', '.OGG' ]:
-                return redirect(reverse('bookupload',messages.error(request,'Invalid Audiofile format.')),permanent=True)
+                return redirect(reverse('bookupload',messages.info(request,'Audio File size must be less than 3mb.')),permanent=True) 
+           
             try:
                 book = Book.objects.get(bookname = name,bookauthor = author,user = request.user.id,booktype = type )
                 return redirect(reverse('bookupload',messages.error(request,'A file exist with the same identity')),permanent=True)
@@ -330,9 +327,8 @@ def book_review_edit(request,name,author,reviewer,genere):
             
             try:
                 imagefile = request.FILES['bookimg']
-                imgextension = os.path.splitext(imagefile.name)
-                if imgextension[1] not in ['.jpg', '.jpeg', '.png', '.JPG', '.JPEG', '.PNG' ]:
-                    return redirect(reverse('myreview',messages.error(request,'Invalid Imagefile format.')),permanent=True) 
+                if imagefile.size > 1000024:
+                    return redirect(reverse('bookupload',messages.info(request,'Image File size must be less than 1mb.')),permanent=True)
                 else:
                     book.bookimg.delete()
                     book.bookimg = request.FILES['bookimg']
@@ -342,10 +338,7 @@ def book_review_edit(request,name,author,reviewer,genere):
             try:
                 audiofile = request.FILES['bookfile']
                 if audiofile.size > 3000024:
-                    return redirect(reverse('bookupload',messages.info(request,'File size must be less than 3mb.')),permanent=True) 
-                audioextension = os.path.splitext(audiofile.name)
-                if audioextension[1] not in ['.mp3', '.wav', '.ogg', '.MP3', '.WAV', '.OGG' ]:
-                    return redirect(reverse('myreview',messages.error(request,'Invalid Audiofile format.')),permanent=True) 
+                    return redirect(reverse('bookupload',messages.info(request,'Audio File size must be less than 3mb.')),permanent=True)
                 else:
                     book.bookfile.delete()
                     book.bookfile = request.FILES['bookfile']
