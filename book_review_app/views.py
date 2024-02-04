@@ -415,7 +415,7 @@ def pwdchange(request,value,time):
     time_str = str(times.year)+str(times.month)+str(times.day)+str(times.hour)+str(times.minute)+str(times.second)
     decrypt_time = urlsafe_base64_decode(force_str(time))
     
-    if int(time_str)-int(decrypt_time) > 200:
+    if int(time_str)-int(decrypt_time) > 300:
         return redirect(reverse('home',messages.error(request,'Link expired.')),permanent=True)
     
     decrypt_email =  urlsafe_base64_decode(force_str(value)) 
@@ -440,6 +440,9 @@ def pwdchange(request,value,time):
             user.set_password(pwd)
             user.save()
             return redirect(reverse('home',messages.info(request,'password reset successful.')),permanent=True)
+        else:
+            error = form.errors
+            return messages.error(request,error)
     
     return render(request,'book_review_app/pwdchange.html',{'form':PasswordChangeForm})
 
