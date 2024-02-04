@@ -100,7 +100,7 @@ def verify_confirmation(request,email,time):
         time_str = str(times.year)+str(times.month)+str(times.day)+str(times.hour)+str(times.minute)+str(times.second)
         decrypt_time = urlsafe_base64_decode(force_str(time))
         
-        if int(time_str)-int(decrypt_time) > 1000:
+        if (int(time_str)-int(decrypt_time)) > 300:
             return redirect(reverse('home',messages.error(request,'Link expired.')),permanent=True)
         
         try:
