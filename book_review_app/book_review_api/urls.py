@@ -17,5 +17,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('getbookreviews/<str:email>/<str:token>/',views.BookApi.as_view(),name="getbookreviews"),
+    path('getbookreviews/<str:email>/<str:token>/',views.BookApiList.as_view(),name="getbookreviews"),
+    path('getbookreviews/<str:email>/<str:token>/<int:id>/',views.BookApiOne.as_view(),name="getbookreviewsid"),
 ]

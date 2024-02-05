@@ -4,4 +4,12 @@ from rest_framework.serializers import ModelSerializer
 class BookSerializer(ModelSerializer):
     class Meta:
         model = Book
-        exclude = ['id','user','created_datetime','modified_datetime',]
+        exclude = ['created_datetime','modified_datetime',]
+    
+    def to_representation(self, instance):
+        user = super(BookSerializer, self).to_representation(instance)
+        user['user'] = instance.user.username
+        return user
+    
+        
+    
