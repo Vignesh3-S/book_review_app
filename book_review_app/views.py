@@ -79,10 +79,9 @@ def register(request):
 #send email for account verification
 def send_confirmation(request,email):
     time = datetime.now()
-    time_str = str(time.year)+str(time.month)+str(time.day)+str(time.hour)+str(time.minute)+str(time.second)
+    time_str = time.strftime("%Y")+time.strftime("%m")+time.strftime("%d")+time.strftime("%H")+time.strftime("%M")+time.strftime("%S")
     site = get_current_site(request)
     user = User.objects.get(email = email)
-    key = secrets.token_urlsafe(10)
     body = urlsafe_base64_encode(force_bytes(email))
     timestamp = urlsafe_base64_encode(force_bytes(time_str))
     mail_message = render_to_string('book_review_app/email.html',{'email':body,'name':user.username,'domain':site.domain,
@@ -97,7 +96,7 @@ def send_confirmation(request,email):
 def verify_confirmation(request,email,time):
     if request.method == "GET":
         times = datetime.now()
-        time_str = str(times.year)+str(times.month)+str(times.day)+str(times.hour)+str(times.minute)+str(times.second)
+        time_str = time_str =times.strftime("%Y")+times.strftime("%m")+times.strftime("%d")+times.strftime("%H")+times.strftime("%M")+times.strftime("%S")
         decrypt_time = urlsafe_base64_decode(force_str(time))
         
         if (int(time_str)-int(decrypt_time)) > 300:
@@ -383,7 +382,7 @@ def show_feedback(request,name,author,reviewer,genere):
 def pwdchange_sendmsg(request):
     if request.method == "POST":
         time = datetime.now()
-        time_str = str(time.year)+str(time.month)+str(time.day)+str(time.hour)+str(time.minute)+str(time.second)
+        time_str = time.strftime("%Y")+time.strftime("%m")+time.strftime("%d")+time.strftime("%H")+time.strftime("%M")+time.strftime("%S")
         timestamp = urlsafe_base64_encode(force_bytes(time_str))
         site = get_current_site(request)
         form = Emailform(request.POST)
@@ -396,8 +395,8 @@ def pwdchange_sendmsg(request):
             if user.is_active == True:
                 if user.is_BRS_account == True:
                     encrypted_email = urlsafe_base64_encode(force_bytes(email)) 
-                    message =f'''Hello this is from Book Review System. Your can use the below link to change the email of your BRS account. link : '{request.scheme}://{site.domain}/forgotpassword/{encrypted_email}/{timestamp}/'. Don"t reply to this email.'''
-                    send_mail('Email changing link',message,'brsapp33@gmail.com',[email],fail_silently=False)
+                    message =f'''Hello this is from Book Review System. Your can use the below link to change the password of your BRS account. link : '{request.scheme}://{site.domain}/forgotpassword/{encrypted_email}/{timestamp}/'. Don"t reply to this email.'''
+                    send_mail('Password changing link',message,'brsapp33@gmail.com',[email],fail_silently=False)
                     return redirect(reverse('home',messages.info(request,'Check email and follow the link for changing your password.')),permanent=True)
                 else:
                     messages.error(request,'Invalid Email. This email registered using third party.')
@@ -408,7 +407,7 @@ def pwdchange_sendmsg(request):
 # change password 
 def pwdchange(request,value,time):
     times = datetime.now()
-    time_str = str(times.year)+str(times.month)+str(times.day)+str(times.hour)+str(times.minute)+str(times.second)
+    time_str =times.strftime("%Y")+times.strftime("%m")+times.strftime("%d")+times.strftime("%H")+times.strftime("%M")+times.strftime("%S")
     decrypt_time = urlsafe_base64_decode(force_str(time))
     
     if (int(time_str)-int(decrypt_time)) > 300:
