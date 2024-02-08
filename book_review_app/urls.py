@@ -38,4 +38,5 @@ urlpatterns = [
     path('verificationemail/',views.later_send_verification_email,name="sendemailverify"),
     path('logout/',auth_views.LogoutView.as_view(),name = "logout"),
     path('getapi/',views.Getapi,name = "getapi"),
+    path('pasform/',views.getpasform,name = "pasform"),
 ]
