@@ -483,12 +483,11 @@ def getpasform(request):
         formdata = {'nitrogen':request.POST.get("nitrogen"),'phosphorus':request.POST.get('phosphorus'),'potassium':request.POST.get('potassium'),
                     'temperature':request.POST.get('temperature'),'ph':request.POST.get('ph'),'rainfall':request.POST.get('rainfall'),
                     'humidity':request.POST.get('humidity')}
-        response_data = requests.post("http://localhost:8001/getapicrop/c2FzaWd1cnV2aWduZXNoQGdtYWlsLmNvbQ/alewh2ohuqh8rqe2f01hiksm3nfgymvpafq/",data=formdata)
+        response_data = requests.post("https://precision-agricultural-solution.onrender.com/getapicrop/c2FzaWd1cnV2aWduZXNoQGdtYWlsLmNvbQ/alewh2ohuqh8rqe2f01hiksm3nfgymvpafq/",data=formdata)
         if response_data.status_code == 200:
             json_response_data = response_data.json()
             return render(request,'book_review_app/pasresult.html',{"data":json_response_data})
         elif response_data.status_code == 400:
-            json_response_data = response_data.json()
-            return redirect(reverse('pasform',messages.error(request,json_response_data)),permanent=True)
+            return redirect(reverse('pasform',messages.error(request,"Not Found")),permanent=True)
         else:
             return redirect(reverse('pasform',messages.error(request,'Invalid form data')),permanent=True)

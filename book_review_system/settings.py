@@ -11,13 +11,16 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-l&vf=)!kh517$6s3jzm%^d=l*_=ok@xdt@!_&ue+c(3u3gs6tw'
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -86,8 +89,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'book_review_system.wsgi.application'
 
 #Recaptcha
-RECAPTCHA_PUBLIC_KEY = "6LcKsNglAAAAALIMgjrwzsFTbojqMzx_SUm1qshu"
-RECAPTCHA_PRIVATE_KEY = "6LcKsNglAAAAAJHqZJaze5nzZWv_IUgccHGf0_Hg"
+RECAPTCHA_PUBLIC_KEY = os.getenv("RECAPTCHA_PUBLIC_KEY")
+RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY")
 
 
 
@@ -99,10 +102,10 @@ DATABASES = {
     'default': {  
         'ENGINE': 'django.db.backends.mysql',  
         'NAME': 'book_review_system',  
-        'USER': 'avnadmin',  
-        'PASSWORD': 'AVNS_9M2oXLUGleStPjCoWz0',  
-        'HOST': 'mysql-7e08941-pas-ver-1.a.aivencloud.com',  
-        'PORT': '19446',  
+        'USER': os.getenv("USER"),  
+        'PASSWORD':os.getenv("PASSWORD"),  
+        'HOST':os.getenv("HOST"),  
+        'PORT':"19446",  
         'OPTIONS': {  
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"  
         }  
@@ -157,11 +160,11 @@ AUTH_USER_MODEL = 'book_review_app.User'
 
 # Email Configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = '587'
-EMAIL_HOST_USER = 'brsapp33@gmail.com'
-EMAIL_HOST_PASSWORD = 'sqkeczqcyydloipa'
-EMAIL_USE_TLS = 'True'
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+EMAIL_PORT = os.getenv("EMAIL_PORT")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS")
 
 # Redirect URL's
 
@@ -169,12 +172,12 @@ LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
 # Google auth keys
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = "17801722881-gtjm6m6hpbit8m6rd6hko3buppdms8e8.apps.googleusercontent.com"
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "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"
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv("SOCIAL_AUTH_GOOGLE_OAUTH2_KEY")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv("SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET")
 
 # github auth keys
-SOCIAL_AUTH_GITHUB_KEY = '8a94e961e4d9339d45f9'
-SOCIAL_AUTH_GITHUB_SECRET = 'a905d669518d5b1096f846a504e964705a68aef2'
+SOCIAL_AUTH_GITHUB_KEY = os.getenv("SOCIAL_AUTH_GITHUB_KEY")
+SOCIAL_AUTH_GITHUB_SECRET = os.getenv("SOCIAL_AUTH_GITHUB_SECRET")
 
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 
@@ -185,9 +188,9 @@ MEDIA_ROOT= BASE_DIR / 'media'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'dsbweip8p',
-    'API_KEY': '519142513189249',
-    'API_SECRET': 'SNTpMXn7osyKBUzWEYStwooA7Cg',
+    'CLOUD_NAME':os.getenv("CLOUD_NAME") ,
+    'API_KEY':os.getenv("API_KEY") ,
+    'API_SECRET': os.getenv("API_SECRET"),
 }
 
 # Social auth configuration
