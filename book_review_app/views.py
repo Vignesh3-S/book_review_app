@@ -488,6 +488,6 @@ def getpasform(request):
             json_response_data = response_data.json()
             return render(request,'book_review_app/pasresult.html',{"data":json_response_data})
         elif response_data.status_code == 400:
-            return redirect(reverse('pasform',messages.error(request,"Not Found")),permanent=True)
+            return redirect(reverse('pasform',messages.error(request,"Bad request")),permanent=True)
         else:
             return redirect(reverse('pasform',messages.error(request,'Invalid form data')),permanent=True)
