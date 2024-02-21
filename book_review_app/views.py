@@ -491,3 +491,49 @@ def getpasform(request):
             return redirect(reverse('pasform',messages.error(request,"Bad request")),permanent=True)
         else:
             return redirect(reverse('pasform',messages.error(request,'Invalid form data')),permanent=True)
+        
+# merge account verify
+def mergeaccountverify(request):
+    if request.method == "GET":
+        return render(request,'book_review_app/pwdemailmsg.html',{'form':Emailform})
+    elif request.method == "POST":
+        form = Emailform(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            try:
+                user = User.objects.get(email = email)
+            except:
+                return redirect(reverse('merge',messages.error(request,'There is no account with this email. Please give your registered third party email')),permanent=True)
+            if user.is_active == True:
+                if user.is_BRS_account != True:
+                    return render(request,'book_review_app/pwdchange.html',{'form':PasswordChangeForm,'key':'merge','email':email})
+                else:
+                    return redirect(reverse('merge',messages.error(request,'Not a third party account')),permanent=True)
+            else:
+                return redirect(reverse('merge',messages.error(request,'Account deactive. Please contact admin via contact form')),permanent=True)
+
+# merge account success
+def mergeaccount(request):
+    if request.method == "POST":
+        form = PasswordChangeForm(request.POST)
+        if form.is_valid():
+            email = request.POST['email']
+            pwd = form.cleaned_data['password']
+            confirm_pwd = form.cleaned_data['confirm_password']
+            if pwd != confirm_pwd:
+                return redirect(reverse('merge',messages.error(request,'Password and Confirm Password mismatched.')),permanent=True)
+            try:
+                user = User.objects.get(email = email)
+            except:
+                return redirect(reverse('merge',messages.error(request,'There is no account with this email. Please give your registered third party email')),permanent=True)
+            if user.is_active == True:
+                if user.is_BRS_account != True:
+                    user.is_BRS_account = True
+                    user.set_password(pwd)
+                    user.save()
+                    return redirect(reverse('home',messages.success(request,'successfully merged')),permanent=True)
+                else:
+                    return redirect(reverse('merge',messages.error(request,'Not a third party account')),permanent=True)
+            else:
+                return redirect(reverse('merge',messages.error(request,'Account deactive. Please contact admin via contact form')),permanent=True)
+  

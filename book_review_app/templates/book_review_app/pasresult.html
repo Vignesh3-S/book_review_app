@@ -6,31 +6,55 @@
 {% bootstrap_messages %}
 {% bootstrap_javascript %}
 {% block content %}
-<section class="h-100">
-  <div class="container py-5 mt-5" >
-    <div class="row d-flex justify-content-center align-items-center">
-      <div class="col col-lg-5 lg-0">
-        <div class="card" style="border:1.5px solid; border-color:#1C0D00;box-shadow: 1px 1px 10px 1px rgb(133, 97, 97);"
-        data-aos="zoom-in"data-aos-duration="1500">
-            <div class="col-md-8">
-              <div class="card-body p-4">
-                    <h6>Result</h6>
-                    <p style="margin-left: 10%;">Your search result for the values</p>
-                    <ul style="margin-left: 35%;">
-                        <li>Nitrogen : {{data.n}}</li>
-                        <li>Phosphorus : {{data.p}}</li>
-                        <li>Potassium : {{data.k}}</li>
-                        <li>Temperature : {{data.t}}</li>
-                        <li>PH : {{data.ph}}</li>
-                        <li>Humidity : {{data.h}}</li>
-                        <li>Rainfall : {{data.r}}</li>
-                    </ul>
-                    <p style="margin-left: 10%;">is <strong>{{data.crop}}</strong></p>
-              </div>
-            </div>
-        </div>
+  <section class="vh-100">
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <div class="col-8 mt-5">
+          <table class="table table-secondary mt-5">
+            <thead>
+              <tr>
+                <th scope="col">Parameters</th>
+                <th scope="col">Values and Results</th>
+              </tr>
+            </thead>  
+            <tbody data-aos="fade-up" data-aos-duration="1500">
+              <tr>
+                <th scope="row">Nitrogen Value</th>
+                <td>{{data.value.Nitrogen}}</td>
+              </tr>
+              <tr>
+                <th scope="row">Phosphorus Value</th>
+                <td>{{data.value.Phosphorous}}</td>
+              </tr>
+              <tr>
+              <th scope="row">Potassium Value</th>
+              <td>{{data.value.Potassium}}</td>
+              </tr>
+              <tr>
+                <th scope="row">Temperature Value</th>
+                <td>{{data.value.Temperature}}</td>
+              </tr>
+              <tr>
+                <th scope="row">Ph Value</th>
+                <td>{{data.value.PH}}</td>
+              </tr>
+              <tr>
+                <th scope="row">Humidity Value</th>
+                <td>{{data.value.Humidity}}</td>
+              </tr>
+              <tr>
+                <th scope="row">Rainfall Value</th>
+                <td>{{data.value.Rainfall}}</td>
+              </tr>
+              <tr>
+                <th scope="row">Crop</th>
+                <td>{{data.crop}}</td>
+              </tr>
+            </tbody>
+        </table>
+          </div>
       </div>
     </div>
-  </div> <br><br><br><br>
-</section>
+  </section>
 {% endblock %}
+

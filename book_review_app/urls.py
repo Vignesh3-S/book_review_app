@@ -39,4 +39,6 @@ urlpatterns = [
     path('logout/',auth_views.LogoutView.as_view(),name = "logout"),
     path('getapi/',views.Getapi,name = "getapi"),
     path('pasform/',views.getpasform,name = "pasform"),
+    path('mergeaccount/',views.mergeaccountverify,name = "merge"),
+    path('mergeaccountsuccess/',views.mergeaccount,name = "mergesuccess"),
 ]
