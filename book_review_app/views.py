@@ -1,14 +1,15 @@
 from django.shortcuts import render,redirect
 from django.urls import reverse
 from django.contrib import messages
-from .forms import Usercreateform,Contactform,Userloginform,UserBookForm,Userimageform,Userupdateform,Feedbackform,Emailform,PasswordChangeForm
+from .forms import (Usercreateform,Contactform,Userloginform,UserBookForm,Userimageform,Userupdateform,
+Feedbackform,Emailform,PasswordChangeForm,ForgotApiForm)
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from phonenumber_field.validators import validate_international_phonenumber
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 import phonenumbers
-import secrets
+from django.contrib.auth.hashers import check_password
 from django.template.loader import render_to_string
 from .models import User,Book,Feedback,ApiUser
 from django.contrib.sites.shortcuts import get_current_site
@@ -462,7 +463,7 @@ def later_send_verification_email(request):
     return render(request,'book_review_app/pwdemailmsg.html',{'form':Emailform})
 
 @login_required(login_url = 'signin')
-def Getapi(request):
+def getapi(request):
     if request.method == "POST":
         encode_email = urlsafe_base64_encode(force_bytes(request.user.email))
         key = ''.join(random.choices(string.ascii_lowercase +string.digits, k=35))
@@ -474,8 +475,62 @@ def Getapi(request):
         except:
             return redirect(reverse('home',messages.info(request,"Already got Apikey")))
     if request.method == "GET":
-        return render(request,'book_review_app/apiform.html')
+        user = User.objects.get(email = request.user.email)
+        if user.count < 2:
+            return render(request,'book_review_app/apiform.html')
+        else:
+            return redirect(reverse('home',messages.info(request,"Sorry!, Maximum count reached.")))
 
+@login_required(login_url="signin")
+def forgotapi(request):
+    if request.method == "GET":
+        return render(request,'book_review_app/forgotapi.html',{'form':ForgotApiForm})
+    if request.method == "POST":
+        form = ForgotApiForm(request.POST)
+        try:
+            user = User.objects.get(email=request.user.email)
+            apiuser = ApiUser.objects.get(user = user.id)
+        except:
+            return redirect(reverse('forgotapi',messages.error(request,'Invalid user')),permanent=True)
+        if form.is_valid():
+            password = form.cleaned_data['password']
+            name = form.cleaned_data['app_name']
+            type = form.cleaned_data['app_type']
+            if (check_password(password,user.password)) and (apiuser.app_type == type) and (apiuser.app_name == name):
+                encode_email = urlsafe_base64_encode(force_bytes(request.user.email))
+                apikey = f'{request.scheme}://{request.get_host()}/getbookreviews/{encode_email}/'
+                return render(request,'book_review_app/showapi.html',{'value':apiuser.token,'url':apikey,'username':user.username})
+            else:
+                return redirect(reverse('forgotapi',messages.error(request,'Invalid credentials')),permanent=True)
+        else:
+            return redirect(reverse('forgotapi',messages.error(request,form.errors)),permanent=True)
+
+@login_required(login_url="signin")
+def deleteapi(request):
+    if request.method == "GET":
+        return render(request,'book_review_app/deleteapi.html',{'form':ForgotApiForm})
+    if request.method == "POST":
+        form = ForgotApiForm(request.POST)
+        try:
+            user = User.objects.get(email=request.user.email)
+            apiuser = ApiUser.objects.get(user = user.id)
+        except:
+            return redirect(reverse('forgotapi',messages.error(request,'Invalid user')),permanent=True)
+        if form.is_valid():
+            password = form.cleaned_data['password']
+            name = form.cleaned_data['app_name']
+            type = form.cleaned_data['app_type']
+            if (check_password(password,user.password)) and (apiuser.app_type == type) and (apiuser.app_name == name):
+                ApiUser.objects.get(user=user.id,app_name=name,app_type=type).delete()
+                user.count += 1
+                user.save()
+                return redirect(reverse('home',messages.success(request,'API token deleted successfully.')),permanent=True)
+            else:
+                return redirect(reverse('deleteapi',messages.error(request,'Invalid user')),permanent=True)
+        else:
+            return redirect(reverse('deleteapi',messages.error(request,form.errors)),permanent=True)
+                
+    
 def getpasform(request):
     if request.method == "GET":
         return render(request,'book_review_app/pasform.html')

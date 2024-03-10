@@ -17,6 +17,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     is_BRS_account = models.BooleanField(default = False)
+    count = models.IntegerField(verbose_name="API Count",default=0)
     
     objects = Book_users_manager()
     
@@ -66,8 +67,8 @@ class Contact(models.Model):
     
 class ApiUser(models.Model):
     user = models.OneToOneField("User",on_delete=models.CASCADE,verbose_name="API User")
-    app_name =  models.CharField(max_length=200,verbose_name="App Name",default="app name")
-    app_type =  models.CharField(max_length=200,verbose_name="App Type",default="app type")
+    app_name =  models.CharField(max_length=200,verbose_name="App Name")
+    app_type =  models.CharField(max_length=200,verbose_name="App Type")
     token = models.CharField(verbose_name="Token",max_length=40)
     is_valid = models.BooleanField(verbose_name="Token Valid")
     date = models.DateTimeField(auto_now_add=True,verbose_name="Date and Time")

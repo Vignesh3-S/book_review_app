@@ -7,6 +7,24 @@
 {% bootstrap_javascript %}
 <script src="https://kit.fontawesome.com/17eac9c9ad.js" crossorigin="anonymous"> </script>
 {% block content %}
+  <style>
+    .dropdown-menu li {
+      position: relative;
+      }
+      .dropdown-menu .dropdown-submenu {
+      display: none;
+      position: absolute;
+      left: 100%;
+      top: -7px;
+      }
+      .dropdown-menu .dropdown-submenu-left {
+      right: 100%;
+      left: auto;
+      }
+      .dropdown-menu > li:hover > .dropdown-submenu {
+      display: block;
+      }
+  </style>
   <!--intro part-->
   <nav class="navbar fixed-top navbar-expand-lg navbar-dark" style="background-color: rgb(2, 2, 1);">
     <div class="container-fluid py-4">
@@ -50,7 +68,15 @@
             <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
               <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
               <li><a class="dropdown-item" href="{% url 'myreview' %}">my Reviews</a></li>
-              <li><a class="dropdown-item" href="{% url 'getapi' %}">Get API Key</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a class="dropdown-item" href="#">API</a>
+                  <ul class="dropdown-menu dropdown-submenu dropdown-submenu-left">
+                    <li><a class="dropdown-item" href="{% url 'getapi' %}">get API key</a></li>
+                    <li><a class="dropdown-item" href="{% url 'forgotapi' %}">Forgot API key</a></li>
+                    <li><a class="dropdown-item" href="{% url 'deleteapi' %}">Delete API key</a></li>
+                  </ul>
+              </li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item"href="{% url 'pasform' %}">Get Crop</a></li>
               <li><hr class="dropdown-divider"></li>

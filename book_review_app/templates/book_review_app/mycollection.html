@@ -33,7 +33,7 @@
                             </audio>  <br>
                             <a href="{% url 'editbook' name=i.bookname author=i.bookauthor reviewer=i.user.email genere=i.booktype %}" type="button" class="btn btn-secondary btn-lg">Edit</a>
                             <a href="{% url 'deletebook' name=i.bookname author=i.bookauthor reviewer=i.user.email genere=i.booktype %}" 
-                                onclick="return confirm('Are you sure you want to delete this?')" id="mybutton" type="button" class="btn btn-danger btn-lg ">Delete</a>
+                                onclick="return confirm('Are you sure you want to delete this?')" id="mybutton" type="button" class="btn btn-danger btn-lg">Delete</a>
                             <a href="{% url 'viewfeedback' name=i.bookname author=i.bookauthor reviewer=i.user.email genere=i.booktype %}" type="button" class="btn btn-primary btn-lg ">Feedback</a>
                         </div>
                       </div>

@@ -26,14 +26,23 @@
               <div class="card-body p-4">
                 <h6>API Information</h6>
                 <hr class="mt-0 mb-4">
-                <p class="test-text">Hello {{name}},</p>
-                <p class="test-text">Your can get the list of book reviews of our application using 
-                  the below credentials from your application. </p>
-                  <p>Your API token : <span style="color: rgb(27, 25, 58);"> {{token}}</span> </p>
-                  <p>The url :<span style="color: rgb(22, 22, 51);"> {{url}}</span></p>
-                <p class="test-text">Don't refresh the page and do copy paste the url to another file. 
-                    This Information shows to the user only once.</p> 
-                <p class="test-text">This token is valid for 15 days after that you will need to generate another api token.</p>
+                <p>Hello {{username}},</p>
+                {% if value %}
+                <p>Your API token : <span style="color: rgb(51, 41, 182);"> {{value}}</span> </p>
+                <p>The url :<span style="color: rgb(38, 38, 187);"> {{url}}</span></p>
+                {% else %}
+                <p>Don't refresh the page and do copy paste the url and token to another file. 
+                  This Information shows to the user only once.</p> 
+                <p>Your can get the list of book reviews or selected book reviews or individual book review 
+                  from our application using the below credentials. </p>
+                <p>Your API token : <span style="color: rgb(51, 41, 182);"> {{token}}</span> </p>
+                <p>The url :<span style="color: rgb(38, 38, 187);"> {{url}}</span></p>
+                <p>To make GET request inorder to get <strong>all book reviews</strong> use the format :<span class="text-test" style="color:rgb(13, 74, 116);"> url/token/</span></p>
+                <p>To make GET request inorder to get <strong>individual book review </strong>use the format :<span class="text-test" style="color:rgb(13, 74, 116);"> url/token/{id of the book}/</span></p>
+                <p>To make POST request inorder to get only searched book reviews use the format :<span class="text-test" style="color:rgb(13, 74, 116);"> url/token/</span>. Make sure the POST request 
+                  have the search data.
+                </p>
+                {% endif %}
               </div>
             </div>
           </div>
