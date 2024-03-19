@@ -15,6 +15,7 @@ from .models import User,Book,Feedback,ApiUser
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth import authenticate,login
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 import os
 import string
 import random
@@ -138,7 +139,7 @@ def login_user(request):
                         if next :
                             return redirect(next,permanent=True)
                         if user.is_superuser:
-                            return redirect('/pasadmin/',permanent=True)
+                            return redirect('/admin/',permanent=True)
                         else:
                             return redirect(reverse('home',messages.success(request,'Login successfully.')),permanent=True)
                     else:
@@ -262,21 +263,34 @@ def book_review_upload(request):
 # View Review collection
 @login_required(login_url='signin')
 def review_collection(request):
+    book = Book.objects.all()
+    if request.GET.get("order"):
+        order = request.GET.get("order")
+        if order == "newest":
+            book =  Book.objects.all().order_by("-created_datetime")
+        elif order == "author":
+            book =  Book.objects.all().order_by("bookauthor")
+        elif order == "reviewer":
+            book =  Book.objects.all().order_by("user__username")
+        elif order == "genere":
+            book =  Book.objects.all().order_by("booktype")
     if request.method == 'POST':
         query = request.POST['search']
         if Book.objects.filter(bookname__icontains = query):
-            name = Book.objects.filter(bookname__icontains = query)
-            return render(request,'book_review_app/collection.html',{'book':name})
+            book = Book.objects.filter(bookname__icontains = query)
         elif Book.objects.filter(bookauthor__icontains = query):
-            name = Book.objects.filter(bookauthor__icontains = query)
-            return render(request,'book_review_app/collection.html',{'book':name})
+            book = Book.objects.filter(bookauthor__icontains = query)
         elif Book.objects.filter(booktype__icontains = query):
-            name = Book.objects.filter(booktype__icontains = query)
-            return render(request,'book_review_app/collection.html',{'book':name})
+            book = Book.objects.filter(booktype__icontains = query)
         else:
             return redirect(reverse('collection',messages.error(request,"No results found.")),permanent=True)
-    book = Book.objects.all()
-    return render(request,'book_review_app/collection.html',{'book':book})
+    page = Paginator(book,6)
+    page_number = request.GET.get("page")
+    try:
+        page_obj = page.get_page(page_number)
+    except:
+        page_obj = page.get_page(1)
+    return render(request,'book_review_app/collection.html',{'book':page_obj})
 
 # visit my review collection
 @login_required(login_url='signin')
@@ -286,17 +300,23 @@ def my_reviews(request):
     if request.method == 'POST':
         query = request.POST['search']
         if Book.objects.filter(user = user.id,bookname__icontains = query):
-            name = Book.objects.filter(user = user.id,bookname__icontains = query)
-            return render(request,'book_review_app/collection.html',{'book':name})
+            book = Book.objects.filter(user = user.id,bookname__icontains = query)
         elif Book.objects.filter(user = user.id,bookauthor__icontains = query):
-            name = Book.objects.filter(user = user.id,bookauthor__icontains = query)
-            return render(request,'book_review_app/collection.html',{'book':name})
+            book = Book.objects.filter(user = user.id,bookauthor__icontains = query)
         elif Book.objects.filter(user = user.id,booktype__icontains = query):
-            name = Book.objects.filter(user = user.id,booktype__icontains = query)
-            return render(request,'book_review_app/collection.html',{'book':name})
+            book = Book.objects.filter(user = user.id,booktype__icontains = query)
         else:
             return redirect(reverse('myreview',messages.error(request,"No results found.")),permanent=True)
-    return render(request,'book_review_app/mycollection.html',{'book':book})
+    
+    page = Paginator(book, 6)
+    page_number = request.GET.get("page")
+    try:
+        page_obj = page.get_page(page_number)
+    except:
+        page_obj = page.get_page(1)
+        
+    return render(request,'book_review_app/mycollection.html',{'book':page_obj})
+
 
 # Play audio and handle feedback
 @login_required(login_url='signin')
