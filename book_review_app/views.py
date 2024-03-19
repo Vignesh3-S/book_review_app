@@ -284,7 +284,7 @@ def review_collection(request):
             book = Book.objects.filter(booktype__icontains = query)
         else:
             return redirect(reverse('collection',messages.error(request,"No results found.")),permanent=True)
-    page = Paginator(book,6)
+    page = Paginator(book,10)
     page_number = request.GET.get("page")
     try:
         page_obj = page.get_page(page_number)
